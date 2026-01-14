@@ -114,6 +114,14 @@
   #define Z_MIN_PROBE_PIN                   PH11  // Z Probe must be PH11
 #endif
 
+
+//
+// Filament Runout Sensor
+//
+#ifndef FIL_RUNOUT_PIN
+  #define FIL_RUNOUT_PIN   PD3
+#endif
+
 //
 // Probe enable
 //
