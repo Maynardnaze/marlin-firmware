@@ -118,9 +118,9 @@
 //
 // Filament Runout Sensor
 //
-#ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN   PD3
-#endif
+//#ifndef FIL_RUNOUT_PIN
+//  #define FIL_RUNOUT_PIN   PD3
+//#endif
 
 //
 // Probe enable
