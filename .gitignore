@@ -185,3 +185,8 @@ sqlite*.db
 .zed/
 *mcp*.db
 github-app.yml
+
+# Local printer commissioning output (not source)
+/artifacts/
+/PREPARATION-STATUS.json
+/compile_commands.json
