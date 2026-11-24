@@ -26,9 +26,17 @@
 #include "../shared/Marduino.h"
 #include "../../core/serial_hook.h"
 
-class FlushableHardwareSerial : public HardwareSerial {
+#if ENABLED(EMERGENCY_PARSER)
+  #include "SerialRxTask.h"
+  class FlushableHardwareSerial;
+  typedef SerialRxTask<HardwareSerial, FlushableHardwareSerial> FlushableBaseSerial;
+#else
+  typedef HardwareSerial FlushableBaseSerial;
+#endif
+
+class FlushableHardwareSerial : public FlushableBaseSerial {
 public:
-  FlushableHardwareSerial(int uart_nr) : HardwareSerial(uart_nr) {}
+  FlushableHardwareSerial(int uart_nr) : FlushableBaseSerial(uart_nr) {}
 };
 
 extern Serial1Class<FlushableHardwareSerial> flushableSerial;

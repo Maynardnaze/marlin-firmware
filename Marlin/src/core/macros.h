@@ -45,7 +45,7 @@
 #endif
 
 // Clock speed factors
-#if !defined(CYCLES_PER_MICROSECOND) && !defined(__STM32F1__)
+#if !defined(CYCLES_PER_MICROSECOND) && !defined(__STM32F1__) && !defined(ARDUINO_ARCH_AT32)
   #define CYCLES_PER_MICROSECOND (F_CPU / 1000000UL) // 16 or 20 on AVR
 #endif
 
@@ -792,15 +792,17 @@
 #define HAS_E_TEMP_SENSOR (0 REPEAT(EXTRUDERS, _HAS_E_TEMP))
 #define TEMP_SENSOR_IS_MAX_TC(T) (TEMP_SENSOR(T) == -5 || TEMP_SENSOR(T) == -3 || TEMP_SENSOR(T) == -2)
 
-#define _UI_NONE          0
-#define _UI_ORIGIN      101
-#define _UI_FYSETC      102
-#define _UI_HIPRECY     103
-#define _UI_MKS         104
-#define _UI_RELOADED    105
-#define _UI_IA_CREALITY 106
-#define _UI_E3S1PRO     107
-#define _UI_CR10SPROV2  108
-#define _UI_SERMOON_D1  109
+#define _UI_NONE             0
+#define _UI_ORIGIN         101
+#define _UI_FYSETC         102
+#define _UI_HIPRECY        103
+#define _UI_MKS            104
+#define _UI_RELOADED       105
+#define _UI_IA_CREALITY    106
+#define _UI_E3S1PRO        107
+#define _UI_CR10SPROV2     108
+#define _UI_SERMOON_D1     109
+#define _UI_SERMOON_V1     111
+#define _UI_CREALITY_TOUCH 112
 #define _DGUS_UI_IS(N) || (CAT(_UI_, DGUS_LCD_UI) == CAT(_UI_, N))
 #define DGUS_UI_IS(V...) (0 MAP(_DGUS_UI_IS, V))

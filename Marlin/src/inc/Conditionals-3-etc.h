@@ -70,9 +70,6 @@
 #if DISABLED(SINGLENOZZLE)
   #undef SINGLENOZZLE_STANDBY_TEMP
 #endif
-#if !ALL(HAS_FAN, SINGLENOZZLE)
-  #undef SINGLENOZZLE_STANDBY_FAN
-#endif
 
 // No inactive extruders with SWITCHING_NOZZLE or Průša MMU1 or just 1 E stepper exists
 #if HAS_SWITCHING_NOZZLE || HAS_PRUSA_MMU1 || E_STEPPERS < 2
@@ -380,10 +377,20 @@
  * Conditionals based on the type of Bed Probe
  */
 #if HAS_BED_PROBE
+  /**
+   * HAS_DELTA_SENSORLESS_PROBING
+   *   DELTA sensorless probing stalls any tower and reads the X/Y/Z MAX DIAG pins together.
+   *   There is no single probe pin, so it gets no Z_MIN_PROBE state.
+   *
+   * HAS_Z_PROBE_STATE
+   *   Every other probe reports through a single Z_MIN_PROBE endstop state. This includes a
+   *   Cartesian SENSORLESS_PROBING (the Z driver DIAG pin) and BD_SENSOR, not just a physical switch.
+   *   See also USE_Z_MIN_PROBE in Conditionals-5-post.h.
+   */
   #if ALL(DELTA, SENSORLESS_PROBING)
     #define HAS_DELTA_SENSORLESS_PROBING 1
   #else
-    #define HAS_REAL_BED_PROBE 1
+    #define HAS_Z_PROBE_STATE 1
   #endif
   #if DISABLED(NOZZLE_AS_PROBE)
     #define HAS_PROBE_XY_OFFSET 1
@@ -435,11 +442,6 @@
   #undef PROBING_NOZZLE_TEMP
   #undef PROBING_BED_TEMP
   #undef NOZZLE_TO_PROBE_OFFSET
-#endif
-
-#if NONE(BABYSTEPPING, HAS_BED_PROBE, HAS_WORKSPACE_OFFSET)
-  #undef PROBE_OFFSET_ZMIN
-  #undef PROBE_OFFSET_ZMAX
 #endif
 
 #if ANY(PREHEAT_BEFORE_PROBING, PREHEAT_BEFORE_LEVELING)
@@ -516,7 +518,7 @@
 #if !HAS_LEVELING || ANY(MESH_BED_LEVELING, AUTO_BED_LEVELING_UBL)
   #undef PROBE_MANUALLY
 #endif
-#if ENABLED(PREHEAT_BEFORE_LEVELING) && ANY(DWIN_LCD_PROUI, ELEGOO_NEPTUNE_3_TFT)
+#if ENABLED(PREHEAT_BEFORE_LEVELING) && ANY(DWIN_LCD_PROUI, ELEGOO_NEPTUNE_3_TFT, DGUS_LCD_UI_CREALITY_TOUCH)
   #define HAS_LEVELING_TEMP_EDIT 1
 #endif
 #if ANY(HAS_BED_PROBE, PROBE_MANUALLY, MESH_BED_LEVELING)
@@ -649,6 +651,11 @@
 #if ANY(SCARA, AXEL_TPARA)
   #define IS_SCARA 1              // Linear Motion derives from SCARA kinematics
 #endif
+// The PancakeBot batter pump is on the fan output and must stop while paused
+#if ENABLED(PANCAKEBOT) && DISABLED(ADVANCED_PAUSE_FANS_PAUSE)
+  #define ADVANCED_PAUSE_FANS_PAUSE
+#endif
+
 #if ANY(IS_SCARA, DELTA, POLARGRAPH, POLAR)
   #define IS_KINEMATIC 1          // Linear Motion derives from kinematic conversion and segmentation
 #else

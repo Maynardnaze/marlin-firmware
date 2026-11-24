@@ -2389,6 +2389,17 @@
 #endif
 
 /**
+ * G-code Preview for TFT Color UI
+ * Show the thumbnail your slicer embeds in the G-code before printing a file.
+ * Set your slicer to write JPG or QOI thumbnails, or MKS TFT preview images.
+ */
+#if ALL(TFT_COLOR_UI, HAS_MEDIA)
+  //#define GCODE_PREVIEW_JPEG  // Enable JPEG thumbnail decoding
+  //#define GCODE_PREVIEW_QOI   // Enable QOI thumbnail decoding
+  //#define GCODE_PREVIEW_MKS   // Enable MKS TFT preview images (";simage:" / ";;gimage:")
+#endif
+
+/**
  * Display Sleep
  * Enable this option to save energy and prevent OLED pixel burn-in.
  */
@@ -3520,7 +3531,7 @@
    * Optimize spreadCycle chopper parameters by using predefined parameter sets
    * or with the help of an example included in the library.
    * Provided parameter sets are
-   * CHOPPER_DEFAULT_12V
+   * CHOPPER_DEFAULT_12V  // 1.8 degree steppers (also CHOPPER_18STEP_<V>)
    * CHOPPER_DEFAULT_19V
    * CHOPPER_DEFAULT_24V
    * CHOPPER_DEFAULT_36V
@@ -3675,7 +3686,7 @@
   #define SENSORLESS_HOMING // StallGuard capable drivers only
 
   #if ANY(SENSORLESS_HOMING, SENSORLESS_PROBING)
-    // TMC2209: 0...255. TMC2130: -64...63
+    // TMC2209, TMC2240: 0...255. Others: -64...63
     #define X_STALL_SENSITIVITY  81
     #define X2_STALL_SENSITIVITY X_STALL_SENSITIVITY
     #define Y_STALL_SENSITIVITY  85

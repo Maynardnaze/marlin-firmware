@@ -22,13 +22,13 @@
 #pragma once
 
 /**
- * mmu2_supported_version.h
+ * mmu3_supported_version.h
  */
 
 #include <stdint.h>
 
 #define mmuVersionMajor 3
 #define mmuVersionMinor 0
-#define mmuVersionPatch 3
+#define mmuVersionPatch 3     // Preserve installed 3.0.3 minimum; upstream accepts newer patch levels.
 
 #define MMU_VERSION STRINGIFY(mmuVersionMajor) "." STRINGIFY(mmuVersionMinor) "." STRINGIFY(mmuVersionPatch)

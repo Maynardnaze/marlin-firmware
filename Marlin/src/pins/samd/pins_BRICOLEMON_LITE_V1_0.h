@@ -579,7 +579,7 @@
 #if HAS_TMC_UART
   /**
    * TMC2208/TMC2209 stepper drivers
-   *  It seems to work perfectly fine on Software Serial, if an advanced user wants to test, you could use the SAMD51 Serial1 and Serial 2. Be careful with the Sercom configurations.
+   *  Software serial is the default. For hardware serial, steppers 1-4 (X,Y,Z,E0) are on Serial1 (RX = 0, TX = 1).
    */
   //#define X_HARDWARE_SERIAL  Serial1
   //#define Y_HARDWARE_SERIAL  Serial1
@@ -610,18 +610,12 @@
   #endif
 
   //
-  // Software serial
+  // Software serial, single-wire. The drivers share one PDN_UART line, wired to D0
+  // directly and to D1 through 1K. An undefined RX pin is set to its TX pin.
   //
   #define X_SERIAL_TX_PIN                      0
-  #define X_SERIAL_RX_PIN                      1
-
   #define Y_SERIAL_TX_PIN        X_SERIAL_TX_PIN
-  #define Y_SERIAL_RX_PIN        X_SERIAL_RX_PIN
-
   #define Z_SERIAL_TX_PIN        X_SERIAL_TX_PIN
-  #define Z_SERIAL_RX_PIN        X_SERIAL_RX_PIN
-
   #define E0_SERIAL_TX_PIN       X_SERIAL_TX_PIN
-  #define E0_SERIAL_RX_PIN       X_SERIAL_RX_PIN
 
 #endif

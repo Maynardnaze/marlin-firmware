@@ -28,7 +28,14 @@
 #include "../../sd/cardreader.h"
 #include "../../module/printcounter.h"
 #include "../../lcd/marlinui.h"
+#if ENABLED(EXTENSIBLE_UI)
+  #include "../../lcd/extui/ui_api.h"
+#endif
 #include "../../module/temperature.h"
+
+#if ENABLED(CREALITY_RTS)
+  #include "../../lcd/rts/lcd_rts.h"
+#endif
 
 #if ENABLED(PARK_HEAD_ON_PAUSE)
   #include "../../feature/pause.h"
@@ -61,6 +68,9 @@
  *     T<time>  Elapsed time since start of print
  */
 void GcodeSuite::M24() {
+  // A UI that parked the nozzle on pause may need to unpark first
+  if (TERN0(EXTENSIBLE_UI, ExtUI::onResumeRequest())) return;
+
   #if MEDIA_PAUSE_PARK_NOZZLE_TIMEOUT
     // Re-enable any timed-out heaters
     HOTEND_LOOP() thermalManager.reset_hotend_idle_timer(e);
@@ -82,7 +92,7 @@ void GcodeSuite::M24() {
   #endif
 
   #if ENABLED(PARK_HEAD_ON_PAUSE)
-    if (did_pause_print) {
+    if (paused_for_filament_change) {
       resume_print(); // will call print_job_timer.start()
       return;
     }
@@ -102,6 +112,8 @@ void GcodeSuite::M24() {
   #endif
 
   ui.reset_status();
+
+  TERN_(CREALITY_RTS, RTS_PrintStartedSD());
 }
 
 /**
